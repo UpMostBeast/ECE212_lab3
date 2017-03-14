@@ -17,8 +17,10 @@
 /******************************************************************/
 WelcomePrompt:
 /*Write your program here******************************************/
-movea.l #0x2300000, %a2
+lea -20(%sp),%sp
+movem.l %d0-%d3/%a2, (%sp)
 
+movea.l #0x2300000, %a2
 pea Welcome
 jsr iprintf
 addq.l #4, %sp
@@ -45,7 +47,7 @@ jsr cr
 bra dataloop
 
 continue1:
-move.l %d2, 8(%sp)
+move.l %d2, 28(%sp)
 
 divisorloop:
 pea Divisor
@@ -68,9 +70,9 @@ jsr cr
 bra divisorloop
 
 continue2:
-move.l %d2, 4(%sp)
+move.l %d2, 24(%sp)
 
-move.l 8(%sp), %d3
+move.l 28(%sp), %d3
 
 inputnext:
 pea NextData
@@ -109,6 +111,9 @@ jsr cr
 bra inputlast
 continue4:
 move.l %d2, (%a2)+
+
+movem.l (%sp),%d0-%d3/%a2
+lea 20(%sp),%sp
 rts
 
 /*End of Subroutine **************************************************/ 

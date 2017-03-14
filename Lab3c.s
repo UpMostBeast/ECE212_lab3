@@ -17,12 +17,15 @@
 /******************************************************************/
 Display:
 /*Write your program here******************************************/
-move.l %d3, %d6
+lea -12(%sp),%sp
+movem.l %d5/%a2-%a3, (%sp)
+
+move.l 20(%sp), %d5
 
 pea Entries
 jsr iprintf
 addq.l #4, %sp
-move.l %d3, -(%sp)
+move.l 20(%sp), -(%sp)
 jsr value
 addq.l #4, %sp
 jsr cr
@@ -32,7 +35,7 @@ move.l (%a2)+, -(%sp)
 jsr value
 addq.l #4, %sp
 jsr cr
-sub.l #1, %d6
+sub.l #1, %d5
 bne displayloop
 
 pea Min
@@ -62,7 +65,7 @@ jsr cr
 pea Divisible1
 jsr iprintf
 addq.l #4, %sp
-move.l %d4, -(%sp)
+move.l 24(%sp), -(%sp)
 jsr value
 addq.l #4, %sp
 pea Divisible2
@@ -79,6 +82,8 @@ addq.l #4, %sp
 jsr cr
 
 
+movem.l  (%sp), %d5/%a2-%a3
+lea 12(%sp),%sp
 rts 
 
 /*End of Subroutine **************************************************/ 

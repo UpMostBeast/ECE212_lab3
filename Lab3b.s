@@ -19,12 +19,14 @@ Stats:
 /*Write your program here******************************************/
 
 /*preserve registers*/
+lea -32(%sp),%sp
+movem.l %d2-%d7/%a2-%a3, (%sp)
 
 /*initialize used registers: a2 is array, a3 is stats destination*/
 move.l (%a2), %d2 /*min register*/
 move.l (%a2), %d3 /*max register*/
 clr.l %d4 /* mean register*/
-move.l 8(%sp), %d5 /* counter or # of entries*/
+move.l 40(%sp), %d5 /* counter or # of entries*/
 clr.l %d7
 /*main loop*/
 loop:
@@ -37,7 +39,7 @@ continue1:cmp.l %d6, %d3
 bgt continue2
 move.l %d6, %d3
 continue2:move.l %d7, -(%sp)
-move.l 8(%sp), %d7
+move.l 40(%sp), %d7
 divs.w %d7, %d6
 move.l (%sp)+, %d7
 lsr.l #8, %d6
@@ -50,11 +52,14 @@ continue3:
 sub.l #1, %d5
 bne loop
 
-move.l %d7, 12(%sp)
+move.l %d7, 44(%sp)
 move.l %d2, (%a3)+
 move.l %d3, (%a3)+
-divs.l 8(%sp), %d4
+divs.l 40(%sp), %d4
 move.l %d4, (%a3)
+
+movem.l (%sp),%d2-%d7/%a2-%a3
+lea 32(%sp),%sp
 rts 
 
 /*End of Subroutine **************************************************/ 
